@@ -6,14 +6,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+
+
 @RestController
 public class MeetMockController {
 
-    //private final AgifyService agifyService;
+    private final AgifyService agifyService;
 
-    /*MeetMockController(AgifyService agifyService) {
+    MeetMockController(AgifyService agifyService) {
         this.agifyService = agifyService;
-    }*/
+    }
 
     @GetMapping(path = "/api/matches", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Matches> getMatches(@RequestParam(name = "userName") String name, @RequestParam(name = "userCountry") String country) {

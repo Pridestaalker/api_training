@@ -13,13 +13,13 @@ public class Launcher {
         SpringApplication.run(Launcher.class, args);
     }
 
-    //@Bean
-    /*AgifyClient agifyClient() {
+    @Bean
+    AgifyClient agifyC() {
         Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://api.agify.io/")
             .addConverterFactory(JacksonConverterFactory.create())
             .build();
 
         return retrofit.create(AgifyClient.class);
-    }*/
+    }
 }
