@@ -1,12 +1,11 @@
 package fr.esiea.ex4A;
 
-import org.springframework.http.MediaType;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-
+import java.io.IOException;
+import java.util.ArrayList;
 
 @RestController
 public class MeetMockController {
@@ -17,29 +16,21 @@ public class MeetMockController {
         this.agifyService = agifyService;
     }
 
-    @GetMapping(path = "/api/matches", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Matches> getMatches(@RequestParam(name = "userName") String name, @RequestParam(name = "userCountry") String country) {
-        return List.of(
-            new Matches("Florian", "Pridestalker98"),
-            new Matches("Keanu", "John_Wick")
-        );
+    @PostMapping(path = "api/inscription")
+    void inscription(@RequestBody User user) throws IOException {
+        agifyService.addUser(user);
     }
 
-
-    @PostMapping(value = "api/inscription", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void inscription(@RequestBody UserInfo userinfo) throws InterruptedException {
-        TimeUnit.SECONDS.sleep(2L);
-        System.out.println(userinfo.userCountry);
-
-
-    }
-    public static class Matches {
-        public final String name;
-        public final String twitter;
-
-        public Matches(String name, String twitter) {
-            this.name   = name;
-            this.twitter    = twitter;
+    @GetMapping("api/matches")
+    String match(@RequestParam(name="userName") String userName, @RequestParam(name="userCountry") String userCountry) throws JSONException {
+        ArrayList<User> userMatch = agifyService.matchFor(userName, userCountry);
+        JSONArray array = new JSONArray();
+        for (User user : userMatch) {
+            JSONObject item = new JSONObject();
+            item.put("name", user.username);
+            item.put("twitter", user.twitter);
+            array.put(item);
         }
+        return array.toString();
     }
 }
